@@ -9,15 +9,15 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func ConnectDatabase() (*gorm.DB, error) {
+func ConnectDatabase() *gorm.DB {
 	db, err := gorm.Open(mysql.Open(config.LoadDatabaseConfig()), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 
 	if err != nil {
-		log.Printf("Error while connecting to database: %v", err)
-		return nil, err
+		log.Fatalf("Error while connecting to database: %v", err)
+		return nil
 	}
 
-	return db, nil
+	return db
 }

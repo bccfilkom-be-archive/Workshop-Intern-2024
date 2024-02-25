@@ -3,6 +3,7 @@ package rest
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/Ndraaa15/workshop-bcc/sdk/database/mysql"
@@ -18,16 +19,15 @@ type Rest struct {
 	db     *gorm.DB
 }
 
-func NewRest() (*Rest, error) {
-	db, err := mysql.ConnectDatabase()
-	if err != nil {
-		return nil, err
-	}
+func NewRest() *Rest {
+	db := mysql.ConnectDatabase()
+
+	// global middleware goes here
 
 	return &Rest{
 		router: gin.Default(),
 		db:     db,
-	}, nil
+	}
 }
 
 func (r *Rest) MountEndpoint() {
@@ -35,19 +35,27 @@ func (r *Rest) MountEndpoint() {
 	service := service.NewService(repository)
 	handler := handler.NewHandler(service)
 
+	r.router.GET("/health-check", healthCheck)
+
 	r.router.POST("/users", handler.UserHandler.CreateUser)
 
 }
 
-func (r *Rest) Serve() error {
+func (r *Rest) Serve() {
+	mysql.Migration(r.db)
+
 	addr := os.Getenv("APP_ADDRESS")
 	port := os.Getenv("APP_PORT")
 
 	err := r.router.Run(fmt.Sprintf("%s:%s", addr, port))
 	if err != nil {
-		log.Printf("Error while serving: %v", err)
-		return err
+		log.Fatalf("Error while serving: %v", err)
 	}
 
-	return nil
+}
+
+func healthCheck(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "success",
+	})
 }
