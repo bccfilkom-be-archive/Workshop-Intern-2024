@@ -7,7 +7,7 @@ import (
 )
 
 type Book struct {
-	ID          uuid.UUID `json:"id" gorm:"type:uuid;primary_key;default:uuid_generate_v4()"`
+	ID          uuid.UUID `json:"id" gorm:"type:varchar(36);primary_key;"`
 	Name        string    `json:"name"`
 	Writter     string    `json:"writter"`
 	Year        uint      `json:"year"`

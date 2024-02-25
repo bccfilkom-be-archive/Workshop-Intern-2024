@@ -1,7 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"github.com/Ndraaa15/workshop-bcc/sdk/config"
+	"github.com/Ndraaa15/workshop-bcc/src/rest"
+)
 
 func main() {
-	fmt.Println("Hello, World!")
+	config.LoadEnv()
+
+	rest := rest.NewRest()
+
+	rest .MountEndpoint()
+
+	rest.Serve()
 }
