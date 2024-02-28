@@ -11,7 +11,7 @@ import (
 
 func ConnectDatabase() *gorm.DB {
 	db, err := gorm.Open(mysql.Open(config.LoadDatabaseConfig()), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
+		Logger: logger.Default.LogMode(logger.Silent),
 	})
 
 	if err != nil {

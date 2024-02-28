@@ -4,11 +4,15 @@ import "github.com/Ndraaa15/workshop-bcc/src/internal/service"
 
 type Handler struct {
 	UserHandler *UserHandler
+	BookHandler *BookHandler
 }
 
-func NewHandler(userService service.IUserService) *Handler {
-	return &Handler{
-		UserHandler: NewUserHandler(userService),
-	}
+func NewHandler(service *service.Service) *Handler {
+	userHandler := NewUserHandler(service.UserService)
+	bookHandler := NewBookHandler(service.BookService)
 
+	return &Handler{
+		UserHandler: userHandler,
+		BookHandler: bookHandler,
+	}
 }

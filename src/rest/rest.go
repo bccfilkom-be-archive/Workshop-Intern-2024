@@ -35,9 +35,15 @@ func (r *Rest) MountEndpoint() {
 	service := service.NewService(repository)
 	handler := handler.NewHandler(service)
 
-	r.router.GET("/health-check", healthCheck)
+	routerGroup := r.router.Group("/api/v1")
 
-	r.router.POST("/users", handler.UserHandler.CreateUser)
+	routerGroup.GET("/health-check", healthCheck)
+
+	book := routerGroup.Group("/book")
+	book.POST("/", handler.BookHandler.CreateBook)
+	book.GET("/:id", handler.BookHandler.GetBookByID)
+	book.DELETE("/:id", handler.BookHandler.DeleteBook)
+	book.PATCH("/:id", handler.BookHandler.UpdateBook)
 
 }
 

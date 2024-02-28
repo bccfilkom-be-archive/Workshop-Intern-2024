@@ -8,14 +8,13 @@ import (
 
 type Book struct {
 	ID          uuid.UUID `json:"id" gorm:"type:varchar(36);primary_key;"`
-	Name        string    `json:"name"`
-	Writter     string    `json:"writter"`
-	Year        uint      `json:"year"`
-	Genre       string    `json:"genre"`
-	Description string    `json:"description"`
-	Stock       uint      `json:"stock"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
-	DeleteAt    time.Time `json:"delete_at"`
-	User        []User    `gorm:"many2many:rents;"`
+	Title       string    `json:"title" gorm:"type:varchar(255);not null;unique"`
+	Writter     string    `json:"writter" gorm:"type:varchar(255);not null;"`
+	Year        uint      `json:"year" gorm:"type:int;not null;"`
+	Genre       string    `json:"genre" gorm:"type:varchar(255);not null;"`
+	Description string    `json:"description" gorm:"type:text;not null;"`
+	Stock       uint      `json:"stock" gorm:"type:int unsigned;not null;"`
+	CreatedAt   time.Time `json:"created_at" gorm:"autoCreateTime"`
+	UpdatedAt   time.Time `json:"updated_at" gorm:"autoUpdateTime"`
+	Rent        []Rent    `json:"rents"`
 }

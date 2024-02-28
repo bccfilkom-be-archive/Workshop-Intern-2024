@@ -3,13 +3,16 @@ package service
 import "github.com/Ndraaa15/workshop-bcc/src/internal/repository"
 
 type Service struct {
-	userRepository repository.IUserRepository
+	UserService IUserService
+	BookService IBookService
 }
 
 func NewService(repository *repository.Repository) *Service {
-	userRepository := NewUserService(repository.UserRepository)
+	userService := NewUserService(repository.UserRepository)
+	bookService := NewBookService(repository.BookRepository)
 
 	return &Service{
-		userRepository: userRepository,
+		UserService: userService,
+		BookService: bookService,
 	}
 }
