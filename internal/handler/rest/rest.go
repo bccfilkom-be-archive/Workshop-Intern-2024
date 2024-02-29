@@ -33,6 +33,8 @@ func (r *Rest) MountEndpoint() {
 
 	routerGroup.GET("/time-out", testTimeout)
 
+	routerGroup.POST("/register", r.Register)
+
 	book := routerGroup.Group("/book")
 	book.POST("/", r.CreateBook)
 	book.GET("/:id", r.GetBookByID)

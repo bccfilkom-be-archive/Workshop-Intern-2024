@@ -1,15 +1,27 @@
 package rest
 
 import (
-	"github.com/Ndraaa15/workshop-bcc/internal/service"
+	"net/http"
+
+	"github.com/Ndraaa15/workshop-bcc/model"
+	"github.com/Ndraaa15/workshop-bcc/pkg/response"
+	"github.com/gin-gonic/gin"
 )
 
-type UserHandler struct {
-	us service.IUserService
-}
+func (r *Rest) Register(ctx *gin.Context) {
+	param := model.UserRegister{}
 
-func NewUserHandler(us service.IUserService) *UserHandler {
-	return &UserHandler{
-		us: us,
+	err := ctx.ShouldBindJSON(&param)
+	if err != nil {
+		response.Error(ctx, http.StatusBadRequest, "failed to bind input", err)
+		return
 	}
+
+	token, err := r.service.UserService.Register(param)
+	if err != nil {
+		response.Error(ctx, http.StatusInternalServerError, "failed to register new user", err)
+		return
+	}
+
+	response.Success(ctx, http.StatusCreated, "success register new user", token)
 }
