@@ -46,6 +46,7 @@ func (r *Rest) MountEndpoint() {
 	book.DELETE("/:id", handler.BookHandler.DeleteBook)
 	book.PATCH("/:id", handler.BookHandler.UpdateBook)
 	book.GET("/", handler.BookHandler.GetAllBook)
+	book.GET("/", handler.BookHandler.GetAllBook)
 
 }
 
@@ -65,6 +66,19 @@ func (r *Rest) Serve() {
 		}
 	}
 
+	var totalRole int64
+	if err := r.db.Model(&entity.Role{}).Count(&totalRole).Error; err != nil {
+		log.Fatalf("Error while counting book: %v", err)
+		return
+	}
+
+	if totalRole == 0 {
+		if err := mysql.GenereateRole(r.db); err != nil {
+			log.Fatalf("Error while generating book: %v", err)
+			return
+		}
+	}
+
 	addr := os.Getenv("APP_ADDRESS")
 	port := os.Getenv("APP_PORT")
 
@@ -72,7 +86,6 @@ func (r *Rest) Serve() {
 	if err != nil {
 		log.Fatalf("Error while serving: %v", err)
 	}
-
 }
 
 func healthCheck(ctx *gin.Context) {
