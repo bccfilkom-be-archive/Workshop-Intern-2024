@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/Ndraaa15/workshop-bcc/entity"
 	"github.com/Ndraaa15/workshop-bcc/internal/handler"
 	"github.com/Ndraaa15/workshop-bcc/internal/repository"
 	"github.com/Ndraaa15/workshop-bcc/internal/service"
@@ -44,11 +45,25 @@ func (r *Rest) MountEndpoint() {
 	book.GET("/:id", handler.BookHandler.GetBookByID)
 	book.DELETE("/:id", handler.BookHandler.DeleteBook)
 	book.PATCH("/:id", handler.BookHandler.UpdateBook)
+	book.GET("/", handler.BookHandler.GetAllBook)
 
 }
 
 func (r *Rest) Serve() {
 	mysql.Migration(r.db)
+
+	var totalBook int64
+	if err := r.db.Model(&entity.Book{}).Count(&totalBook).Error; err != nil {
+		log.Fatalf("Error while counting book: %v", err)
+		return
+	}
+
+	if totalBook == 0 {
+		if err := mysql.GenerateBook(r.db); err != nil {
+			log.Fatalf("Error while generating book: %v", err)
+			return
+		}
+	}
 
 	addr := os.Getenv("APP_ADDRESS")
 	port := os.Getenv("APP_PORT")

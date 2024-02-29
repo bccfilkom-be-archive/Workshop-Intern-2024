@@ -12,6 +12,7 @@ type IBookRepository interface {
 	UpdateBook(bookReq *entity.Book, id string) (*entity.Book, error)
 	DeleteBook(id string) error
 	GetBookByID(id string) (*entity.Book, error)
+	GetAllBook(limit, offset int) ([]*entity.Book, error)
 }
 
 type BookRepository struct {
@@ -25,7 +26,7 @@ func NewBookRepository(db *gorm.DB) IBookRepository {
 }
 
 func (br *BookRepository) CreateBook(bookReq *entity.Book) (*entity.Book, error) {
-	if err := br.db.Create(&bookReq).Error; err != nil {
+	if err := br.db.Debug().Create(&bookReq).Error; err != nil {
 		return nil, err
 	}
 	return bookReq, nil
@@ -35,7 +36,7 @@ func (br *BookRepository) UpdateBook(bookReq *entity.Book, id string) (*entity.B
 	tx := br.db.Begin()
 
 	var book entity.Book
-	if err := tx.Where("id = ?", id).First(&book).Error; err != nil {
+	if err := tx.Debug().Where("id = ?", id).First(&book).Error; err != nil {
 		tx.Rollback()
 		return nil, err
 	}
@@ -47,7 +48,7 @@ func (br *BookRepository) UpdateBook(bookReq *entity.Book, id string) (*entity.B
 	book.Description = bookReq.Description
 	book.Stock = bookReq.Stock
 
-	if err := tx.Where("id = ?", id).Save(&book).Error; err != nil {
+	if err := tx.Debug().Where("id = ?", id).Save(&book).Error; err != nil {
 		tx.Rollback()
 		return nil, err
 	}
@@ -59,7 +60,7 @@ func (br *BookRepository) UpdateBook(bookReq *entity.Book, id string) (*entity.B
 
 func (br *BookRepository) DeleteBook(id string) error {
 	log.Println(id)
-	if err := br.db.Where("id = ?", id).Delete(&entity.Book{}).Error; err != nil {
+	if err := br.db.Debug().Where("id = ?", id).Delete(&entity.Book{}).Error; err != nil {
 		return err
 	}
 	return nil
@@ -67,8 +68,16 @@ func (br *BookRepository) DeleteBook(id string) error {
 
 func (br *BookRepository) GetBookByID(id string) (*entity.Book, error) {
 	var book entity.Book
-	if err := br.db.Where("id = ?", id).Find(&book).Error; err != nil {
+	if err := br.db.Debug().Where("id = ?", id).Find(&book).Error; err != nil {
 		return nil, err
 	}
 	return &book, nil
+}
+
+func (br *BookRepository) GetAllBook(limit, offset int) ([]*entity.Book, error) {
+	var books []*entity.Book
+	if err := br.db.Debug().Limit(limit).Offset(offset).Find(&books).Error; err != nil {
+		return nil, err
+	}
+	return books, nil
 }

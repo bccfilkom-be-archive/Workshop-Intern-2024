@@ -14,7 +14,7 @@ type Book struct {
 	Genre       string    `json:"genre" gorm:"type:varchar(255);not null;"`
 	Description string    `json:"description" gorm:"type:text;not null;"`
 	Stock       uint      `json:"stock" gorm:"type:int unsigned;not null;"`
-	CreatedAt   time.Time `json:"created_at" gorm:"autoCreateTime"`
-	UpdatedAt   time.Time `json:"updated_at" gorm:"autoUpdateTime"`
+	CreatedAt   time.Time `json:"createdAt" gorm:"autoCreateTime"`
+	UpdatedAt   time.Time `json:"updatedAt" gorm:"autoUpdateTime"`
 	Rent        []Rent    `json:"rents"`
 }
