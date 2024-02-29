@@ -5,8 +5,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/Ndraaa15/workshop-bcc/internal/service"
+	"github.com/Ndraaa15/workshop-bcc/pkg/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,9 +25,13 @@ func NewRest(service *service.Service) *Rest {
 }
 
 func (r *Rest) MountEndpoint() {
+	r.router.Use(middleware.Timeout())
+
 	routerGroup := r.router.Group("/api/v1")
 
 	routerGroup.GET("/health-check", healthCheck)
+
+	routerGroup.GET("/time-out", testTimeout)
 
 	book := routerGroup.Group("/book")
 	book.POST("/", r.CreateBook)
@@ -46,6 +52,14 @@ func (r *Rest) Serve() {
 }
 
 func healthCheck(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "success",
+	})
+}
+
+func testTimeout(ctx *gin.Context) {
+	time.Sleep(3 * time.Second)
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "success",
 	})
