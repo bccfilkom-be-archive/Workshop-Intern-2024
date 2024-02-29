@@ -1,4 +1,4 @@
-package handler
+package rest
 
 import (
 	"github.com/Ndraaa15/workshop-bcc/internal/service"

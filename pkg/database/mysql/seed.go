@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"log"
 	"math/rand"
 
 	"github.com/Ndraaa15/workshop-bcc/entity"
@@ -9,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func GenerateBook(db *gorm.DB) error {
+func generateBook(db *gorm.DB) error {
 	genres := []string{"Sci-Fi", "Fantasy", "Mystery", "Romance", "History"}
 	var books []*entity.Book
 
@@ -32,7 +33,7 @@ func GenerateBook(db *gorm.DB) error {
 	return nil
 }
 
-func GenereateRole(db *gorm.DB) error {
+func generateRole(db *gorm.DB) error {
 	var roles []*entity.Role
 
 	roles = append(roles,
@@ -49,4 +50,30 @@ func GenereateRole(db *gorm.DB) error {
 		return err
 	}
 	return nil
+}
+
+func SeedData(db *gorm.DB) {
+	var totalBook int64
+	if err := db.Model(&entity.Book{}).Count(&totalBook).Error; err != nil {
+		log.Fatalf("Error while counting book: %v", err)
+	}
+
+	if totalBook == 0 {
+		if err := generateBook(db); err != nil {
+			log.Fatalf("Error while generating book: %v", err)
+
+		}
+	}
+
+	var totalRole int64
+	if err := db.Model(&entity.Role{}).Count(&totalRole).Error; err != nil {
+		log.Fatalf("Error while counting book: %v", err)
+	}
+
+	if totalRole == 0 {
+		if err := generateRole(db); err != nil {
+			log.Fatalf("Error while generating book: %v", err)
+
+		}
+	}
 }
