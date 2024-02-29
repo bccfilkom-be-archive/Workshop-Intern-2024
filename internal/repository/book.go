@@ -3,7 +3,7 @@ package repository
 import (
 	"log"
 
-	"github.com/Ndraaa15/workshop-bcc/src/entity"
+	"github.com/Ndraaa15/workshop-bcc/entity"
 	"gorm.io/gorm"
 )
 

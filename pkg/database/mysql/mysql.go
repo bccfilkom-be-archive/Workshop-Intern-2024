@@ -3,7 +3,7 @@ package mysql
 import (
 	"log"
 
-	"github.com/Ndraaa15/workshop-bcc/sdk/config"
+	"github.com/Ndraaa15/workshop-bcc/pkg/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

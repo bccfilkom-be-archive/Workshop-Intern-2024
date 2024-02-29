@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/Ndraaa15/workshop-bcc/src/entity"
-	"github.com/Ndraaa15/workshop-bcc/src/internal/repository"
-	"github.com/Ndraaa15/workshop-bcc/src/model"
+	"github.com/Ndraaa15/workshop-bcc/entity"
+	"github.com/Ndraaa15/workshop-bcc/internal/repository"
+	"github.com/Ndraaa15/workshop-bcc/model"
 	"github.com/google/uuid"
 )
 
