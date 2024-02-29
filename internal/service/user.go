@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/Ndraaa15/workshop-bcc/src/internal/repository"
+	"github.com/Ndraaa15/workshop-bcc/internal/repository"
 )
 
 type IUserService interface {

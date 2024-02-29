@@ -1,6 +1,6 @@
 package service
 
-import "github.com/Ndraaa15/workshop-bcc/src/internal/repository"
+import "github.com/Ndraaa15/workshop-bcc/internal/repository"
 
 type Service struct {
 	UserService IUserService

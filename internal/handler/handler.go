@@ -1,6 +1,6 @@
 package handler
 
-import "github.com/Ndraaa15/workshop-bcc/src/internal/service"
+import "github.com/Ndraaa15/workshop-bcc/internal/service"
 
 type Handler struct {
 	UserHandler *UserHandler
