@@ -10,7 +10,9 @@ import (
 )
 
 type IUserService interface {
-	Register(param model.UserRegister) (model.UserRegisterResponse, error)
+	Register(param model.UserRegister) error
+	GetUser(param model.UserParam) (entity.User, error)
+	Login(param model.UserLogin) (model.UserLoginResponse, error)
 }
 
 type UserService struct {
@@ -27,12 +29,10 @@ func NewUserService(userRepository repository.IUserRepository, bcrypt bcrypt.Int
 	}
 }
 
-func (u *UserService) Register(param model.UserRegister) (model.UserRegisterResponse, error) {
-	var result model.UserRegisterResponse
-
+func (u *UserService) Register(param model.UserRegister) error {
 	hashPassword, err := u.bcrypt.GenerateFromPassword(param.Password)
 	if err != nil {
-		return result, err
+		return err
 	}
 
 	param.ID = uuid.New()
@@ -49,12 +49,30 @@ func (u *UserService) Register(param model.UserRegister) (model.UserRegisterResp
 		Role:     2,
 	}
 
-	user, err = u.ur.CreateUser(user)
+	_, err = u.ur.CreateUser(user)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (u *UserService) Login(param model.UserLogin) (model.UserLoginResponse, error) {
+	result := model.UserLoginResponse{}
+
+	user, err := u.ur.GetUser(model.UserParam{
+		Email: param.Email,
+	})
 	if err != nil {
 		return result, err
 	}
 
-	token, err := u.jwtAuth.CreateJWTToken(user.ID.String())
+	err = u.bcrypt.CompareAndHashPassword(user.Password, param.Password)
+	if err != nil {
+		return result, err
+	}
+
+	token, err := u.jwtAuth.CreateJWTToken(user.ID)
 	if err != nil {
 		return result, err
 	}
@@ -62,4 +80,8 @@ func (u *UserService) Register(param model.UserRegister) (model.UserRegisterResp
 	result.Token = token
 
 	return result, nil
+}
+
+func (u *UserService) GetUser(param model.UserParam) (entity.User, error) {
+	return u.ur.GetUser(param)
 }

@@ -1,16 +1,21 @@
 package jwt
 
 import (
+	"errors"
 	"log"
 	"os"
 	"strconv"
 	"time"
 
+	"github.com/Ndraaa15/workshop-bcc/entity"
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 type Interface interface {
-	CreateJWTToken(userId string) (string, error)
+	CreateJWTToken(userId uuid.UUID) (string, error)
+	ValidateToken(tokenString string) (uuid.UUID, error)
 }
 
 type jsonWebToken struct {
@@ -19,7 +24,7 @@ type jsonWebToken struct {
 }
 
 type Claims struct {
-	UserId string
+	UserId uuid.UUID
 	jwt.RegisteredClaims
 }
 
@@ -36,7 +41,7 @@ func Init() Interface {
 	}
 }
 
-func (j *jsonWebToken) CreateJWTToken(userId string) (string, error) {
+func (j *jsonWebToken) CreateJWTToken(userId uuid.UUID) (string, error) {
 	claim := &Claims{
 		UserId: userId,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -54,10 +59,10 @@ func (j *jsonWebToken) CreateJWTToken(userId string) (string, error) {
 	return tokenString, nil
 }
 
-func (j *jsonWebToken) ValidateToken(tokenString string) (string, error) {
+func (j *jsonWebToken) ValidateToken(tokenString string) (uuid.UUID, error) {
 	var (
 		claims Claims
-		userId string
+		userId uuid.UUID
 	)
 
 	token, err := jwt.ParseWithClaims(tokenString, &claims, func(token *jwt.Token) (interface{}, error) {
@@ -74,4 +79,13 @@ func (j *jsonWebToken) ValidateToken(tokenString string) (string, error) {
 	userId = claims.UserId
 
 	return userId, nil
+}
+
+func (j *jsonWebToken) GetLoginUser(ctx *gin.Context) (entity.User, error) {
+	user, ok := ctx.Get("user")
+	if !ok {
+		return entity.User{}, errors.New("failed to get user")
+	}
+
+	return user.(entity.User), nil
 }

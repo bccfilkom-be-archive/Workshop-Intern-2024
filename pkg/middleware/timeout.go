@@ -12,7 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Timeout() gin.HandlerFunc {
+func (m *middleware) Timeout() gin.HandlerFunc {
 	timeLimit, _ := strconv.Atoi(os.Getenv("TIME_OUT_LIMIT"))
 
 	return timeout.New(

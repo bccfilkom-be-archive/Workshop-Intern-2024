@@ -8,6 +8,7 @@ import (
 	"github.com/Ndraaa15/workshop-bcc/pkg/config"
 	"github.com/Ndraaa15/workshop-bcc/pkg/database/mysql"
 	"github.com/Ndraaa15/workshop-bcc/pkg/jwt"
+	"github.com/Ndraaa15/workshop-bcc/pkg/middleware"
 )
 
 func main() {
@@ -23,7 +24,9 @@ func main() {
 
 	service := service.NewService(service.InitParam{Repository: repository, JwtAuth: jwtAuth, Bcrypt: bcrypt})
 
-	rest := rest.NewRest(service)
+	middleware := middleware.Init(jwtAuth, service)
+
+	rest := rest.NewRest(service, middleware)
 
 	mysql.Migration(db)
 
