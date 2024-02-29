@@ -61,16 +61,7 @@ func (bs *BookService) DeleteBook(id string) error {
 }
 
 func (bs *BookService) UpdateBook(bookReq *model.UpdateBook, id string) (*entity.Book, error) {
-	bookParse := &entity.Book{
-		Title:       bookReq.Title,
-		Writter:     bookReq.Writter,
-		Year:        bookReq.Year,
-		Genre:       bookReq.Genre,
-		Description: bookReq.Description,
-		Stock:       bookReq.Stock,
-	}
-
-	book, err := bs.br.UpdateBook(bookParse, id)
+	book, err := bs.br.UpdateBook(bookReq, id)
 	if err != nil {
 		return nil, err
 	}
@@ -89,3 +80,4 @@ func (bs *BookService) GetAllBook(page int) ([]*entity.Book, error) {
 
 	return books, nil
 }
+

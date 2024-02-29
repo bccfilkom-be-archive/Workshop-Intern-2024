@@ -14,7 +14,7 @@ type User struct {
 	Nim       string    `json:"nim" gorm:"type:varchar(255);not null;unique"`
 	Faculty   string    `json:"faculty" gorm:"type:varchar(255);not null;"`
 	Major     string    `json:"major" gorm:"type:varchar(255);not null;"`
-	Role      string    `json:"role" gorm:"type:varchar(255);not null;"`
+	Role      int       `json:"role" gorm:"foreinKey:ID; references:roles; not null;"`
 	CreatedAt time.Time `json:"createdAt" gorm:"autoCreateTime"`
 	UpdatedAt time.Time `json:"updatedAt" gorm:"autoUpdateTime"`
 	Rent      []Rent    `json:"rents"`
