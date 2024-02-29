@@ -3,6 +3,7 @@ package handler
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/Ndraaa15/workshop-bcc/internal/service"
 	"github.com/Ndraaa15/workshop-bcc/model"
@@ -77,4 +78,20 @@ func (bh *BookHandler) UpdateBook(ctx *gin.Context) {
 	}
 
 	response.Success(ctx, http.StatusOK, "Success to update book", book)
+}
+
+func (bh *BookHandler) GetAllBook(ctx *gin.Context) {
+	pageQuery := ctx.Query("page")
+	page, err := strconv.Atoi(pageQuery)
+	if err != nil {
+		response.Error(ctx, http.StatusUnprocessableEntity, "Failed to bind request", err)
+	}
+
+	book, err := bh.BookService.GetAllBook(page)
+	if err != nil {
+		response.Error(ctx, http.StatusInternalServerError, "Failed to get all book", err)
+		return
+	}
+
+	response.Success(ctx, http.StatusOK, "Success to get all book", book)
 }

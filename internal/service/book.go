@@ -12,6 +12,7 @@ type IBookService interface {
 	GetBookByID(id string) (*entity.Book, error)
 	DeleteBook(id string) error
 	UpdateBook(bookReq *model.UpdateBook, id string) (*entity.Book, error)
+	GetAllBook(page int) ([]*entity.Book, error)
 }
 
 type BookService struct {
@@ -75,4 +76,16 @@ func (bs *BookService) UpdateBook(bookReq *model.UpdateBook, id string) (*entity
 	}
 
 	return book, nil
+}
+
+func (bs *BookService) GetAllBook(page int) ([]*entity.Book, error) {
+	limit := 5
+	offset := (page - 1) * limit
+
+	books, err := bs.br.GetAllBook(limit, offset)
+	if err != nil {
+		return nil, err
+	}
+
+	return books, nil
 }
