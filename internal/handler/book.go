@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/Ndraaa15/workshop-bcc/internal/service"
+	"github.com/Ndraaa15/workshop-bcc/model"
 	"github.com/Ndraaa15/workshop-bcc/sdk/response"
-	"github.com/Ndraaa15/workshop-bcc/src/internal/service"
-	"github.com/Ndraaa15/workshop-bcc/src/model"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,8 +1,8 @@
 package main
 
 import (
+	"github.com/Ndraaa15/workshop-bcc/rest"
 	"github.com/Ndraaa15/workshop-bcc/sdk/config"
-	"github.com/Ndraaa15/workshop-bcc/src/rest"
 )
 
 func main() {
@@ -10,7 +10,7 @@ func main() {
 
 	rest := rest.NewRest()
 
-	rest .MountEndpoint()
+	rest.MountEndpoint()
 
 	rest.Serve()
 }

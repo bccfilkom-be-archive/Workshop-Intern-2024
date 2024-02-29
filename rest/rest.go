@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/Ndraaa15/workshop-bcc/internal/handler"
+	"github.com/Ndraaa15/workshop-bcc/internal/repository"
+	"github.com/Ndraaa15/workshop-bcc/internal/service"
 	"github.com/Ndraaa15/workshop-bcc/sdk/database/mysql"
-	"github.com/Ndraaa15/workshop-bcc/src/internal/handler"
-	"github.com/Ndraaa15/workshop-bcc/src/internal/repository"
-	"github.com/Ndraaa15/workshop-bcc/src/internal/service"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )

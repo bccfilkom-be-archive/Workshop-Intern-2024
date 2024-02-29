@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/Ndraaa15/workshop-bcc/src/internal/service"
+	"github.com/Ndraaa15/workshop-bcc/internal/service"
 )
 
 type UserHandler struct {
