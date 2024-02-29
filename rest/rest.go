@@ -46,6 +46,7 @@ func (r *Rest) MountEndpoint() {
 	book.DELETE("/:id", handler.BookHandler.DeleteBook)
 	book.PATCH("/:id", handler.BookHandler.UpdateBook)
 	book.GET("/", handler.BookHandler.GetAllBook)
+	book.GET("/", handler.BookHandler.GetAllBook)
 
 }
 

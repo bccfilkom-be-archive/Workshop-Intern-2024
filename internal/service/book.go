@@ -80,4 +80,3 @@ func (bs *BookService) GetAllBook(page int) ([]*entity.Book, error) {
 
 	return books, nil
 }
-
