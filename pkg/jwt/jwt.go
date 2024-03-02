@@ -16,6 +16,7 @@ import (
 type Interface interface {
 	CreateJWTToken(userId uuid.UUID) (string, error)
 	ValidateToken(tokenString string) (uuid.UUID, error)
+	GetLoginUser(ctx *gin.Context) (entity.User, error)
 }
 
 type jsonWebToken struct {
