@@ -30,7 +30,7 @@ func NewRest(service *service.Service, middleware middleware.Interface) *Rest {
 }
 
 func (r *Rest) MountEndpoint() {
-	// r.router.Use(r.middleware.Timeout())
+	r.router.Use(r.middleware.Timeout())
 
 	routerGroup := r.router.Group("/api/v1")
 
