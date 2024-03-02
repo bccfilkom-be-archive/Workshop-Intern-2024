@@ -43,3 +43,13 @@ func (r *Rest) Login(ctx *gin.Context) {
 
 	response.Success(ctx, http.StatusOK, "success login to system", token)
 }
+
+func (r *Rest) GetUserRentBook(ctx *gin.Context) {
+	user, err := r.service.UserService.GetUserRentBook(ctx)
+	if err != nil {
+		response.Error(ctx, http.StatusInternalServerError, "failed to get user rent book", err)
+		return
+	}
+
+	response.Success(ctx, http.StatusOK, "success get user rent book", user)
+}

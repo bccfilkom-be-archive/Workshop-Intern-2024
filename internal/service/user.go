@@ -6,6 +6,7 @@ import (
 	"github.com/Ndraaa15/workshop-bcc/model"
 	"github.com/Ndraaa15/workshop-bcc/pkg/bcrypt"
 	"github.com/Ndraaa15/workshop-bcc/pkg/jwt"
+	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
@@ -13,6 +14,7 @@ type IUserService interface {
 	Register(param model.UserRegister) error
 	GetUser(param model.UserParam) (entity.User, error)
 	Login(param model.UserLogin) (model.UserLoginResponse, error)
+	GetUserRentBook(ctx *gin.Context) (entity.User, error)
 }
 
 type UserService struct {
@@ -84,4 +86,17 @@ func (u *UserService) Login(param model.UserLogin) (model.UserLoginResponse, err
 
 func (u *UserService) GetUser(param model.UserParam) (entity.User, error) {
 	return u.ur.GetUser(param)
+}
+
+func (u *UserService) GetUserRentBook(ctx *gin.Context) (entity.User, error) {
+	user, err := u.jwtAuth.GetLoginUser(ctx)
+	if err != nil {
+		return user, err
+	}
+
+	param := model.UserParam{
+		ID: user.ID,
+	}
+
+	return u.ur.GetUserWithRent(param)
 }
