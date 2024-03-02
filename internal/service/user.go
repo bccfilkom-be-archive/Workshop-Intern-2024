@@ -106,10 +106,12 @@ func (u *UserService) GetUserRentBook(ctx *gin.Context) (entity.User, error) {
 }
 
 func (u *UserService) UploadPhoto(ctx *gin.Context, param model.UserUploadPhoto) error {
-	user, err := u.jwtAuth.GetLoginUser(ctx)
+	loginUser, err := u.jwtAuth.GetLoginUser(ctx)
 	if err != nil {
 		return err
 	}
+
+	user, err := u.GetUser(model.UserParam{ID: loginUser.ID})
 
 	if user.PhotoLink != "" {
 		err := u.supabase.Delete(user.PhotoLink)
@@ -123,10 +125,14 @@ func (u *UserService) UploadPhoto(ctx *gin.Context, param model.UserUploadPhoto)
 		return err
 	}
 
-	u.ur.UpdateUser(entity.User{
-		ID:        user.ID,
+	err = u.ur.UpdateUser(entity.User{
 		PhotoLink: link,
+	}, model.UserParam{
+		ID: user.ID,
 	})
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

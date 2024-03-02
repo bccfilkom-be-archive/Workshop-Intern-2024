@@ -18,7 +18,7 @@ type supabaseStorage struct {
 
 func Init() Interface {
 	supClient := supabasestorageuploader.New(
-		os.Getenv("SUPABASE_LINK"),
+		os.Getenv("SUPABASE_URL"),
 		os.Getenv("SUPABASE_TOKEN"),
 		os.Getenv("SUPABASE_BUCKET"),
 	)
