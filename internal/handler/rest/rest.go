@@ -49,6 +49,9 @@ func (r *Rest) MountEndpoint() {
 	book.DELETE("/:id", r.DeleteBook)
 	book.PATCH("/:id", r.UpdateBook)
 	book.GET("/", r.GetAllBook)
+
+	rent := routerGroup.Group("/rent", r.middleware.AuthenticateUser)
+	rent.POST("/", r.RentBook)
 }
 
 func (r *Rest) Serve() {
