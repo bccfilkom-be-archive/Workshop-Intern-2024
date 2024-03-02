@@ -30,7 +30,7 @@ func NewRest(service *service.Service, middleware middleware.Interface) *Rest {
 }
 
 func (r *Rest) MountEndpoint() {
-	r.router.Use(r.middleware.Timeout())
+	// r.router.Use(r.middleware.Timeout())
 
 	routerGroup := r.router.Group("/api/v1")
 
@@ -45,6 +45,7 @@ func (r *Rest) MountEndpoint() {
 
 	user := routerGroup.Group("/user")
 	user.GET("/rent", r.middleware.AuthenticateUser, r.GetUserRentBook)
+	user.POST("/profile/upload", r.middleware.AuthenticateUser, r.UploadPhoto)
 
 	book := routerGroup.Group("/book")
 	book.POST("/", r.CreateBook)

@@ -9,6 +9,7 @@ import (
 	"github.com/Ndraaa15/workshop-bcc/pkg/database/mysql"
 	"github.com/Ndraaa15/workshop-bcc/pkg/jwt"
 	"github.com/Ndraaa15/workshop-bcc/pkg/middleware"
+	"github.com/Ndraaa15/workshop-bcc/pkg/supabase"
 )
 
 func main() {
@@ -18,11 +19,13 @@ func main() {
 
 	bcrypt := bcrypt.Init()
 
+	supabase := supabase.Init()
+
 	db := mysql.ConnectDatabase()
 
 	repository := repository.NewRepository(db)
 
-	service := service.NewService(service.InitParam{Repository: repository, JwtAuth: jwtAuth, Bcrypt: bcrypt})
+	service := service.NewService(service.InitParam{Repository: repository, JwtAuth: jwtAuth, Bcrypt: bcrypt, Supabase: supabase})
 
 	middleware := middleware.Init(jwtAuth, service)
 

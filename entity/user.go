@@ -15,6 +15,7 @@ type User struct {
 	Faculty   string    `json:"faculty" gorm:"type:varchar(255);not null;"`
 	Major     string    `json:"major" gorm:"type:varchar(255);not null;"`
 	Role      int       `json:"role" gorm:"foreinKey:ID; references:roles; not null;"`
+	PhotoLink string    `json:"-" gorm:"type:varchar(200)"`
 	CreatedAt time.Time `json:"createdAt" gorm:"autoCreateTime"`
 	UpdatedAt time.Time `json:"updatedAt" gorm:"autoUpdateTime"`
 	Rent      []Rent    `json:"rents"`

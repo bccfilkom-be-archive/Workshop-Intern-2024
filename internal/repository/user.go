@@ -10,6 +10,7 @@ type IUserRepository interface {
 	CreateUser(user entity.User) (entity.User, error)
 	GetUser(param model.UserParam) (entity.User, error)
 	GetUserWithRent(param model.UserParam) (entity.User, error)
+	UpdateUser(user entity.User) error
 }
 
 type UserRepository struct {
@@ -49,4 +50,13 @@ func (u *UserRepository) GetUserWithRent(param model.UserParam) (entity.User, er
 	}
 
 	return user, nil
+}
+
+func (u *UserRepository) UpdateUser(user entity.User) error {
+	err := u.db.Debug().Model(&entity.User{}).Updates(&user).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
