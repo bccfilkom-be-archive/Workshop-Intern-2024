@@ -13,7 +13,6 @@ type Rent struct {
 	Total     int       `json:"total"`
 	IsReturn  bool      `json:"isReturn"`
 	ReturnAt  time.Time `json:"returnAt"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	DeleteAt  time.Time `json:"deleteAt"`
+	CreatedAt time.Time `json:"createdAt" gorm:"autoCreateTime"`
+	UpdatedAt time.Time `json:"updatedAt" gorm:"autoUpdateTime"`
 }

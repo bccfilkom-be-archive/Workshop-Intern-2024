@@ -85,7 +85,7 @@ func parseUpdateReq(book *entity.Book, bookReq *model.UpdateBook) *entity.Book {
 	if bookReq.Writter != "" {
 		book.Writter = bookReq.Writter
 	}
-	if bookReq.Year >= 0 {
+	if bookReq.Year > 0 {
 		book.Year = bookReq.Year
 	}
 	if bookReq.Genre != "" {

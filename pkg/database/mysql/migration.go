@@ -8,12 +8,12 @@ import (
 )
 
 func Migration(db *gorm.DB) {
-	db.Migrator().DropTable(
-		&entity.User{},
-		&entity.Book{},
-		&entity.Rent{},
-		&entity.Role{},
-	)
+	// db.Migrator().DropTable(
+	// 	&entity.User{},
+	// 	&entity.Book{},
+	// 	&entity.Rent{},
+	// 	&entity.Role{},
+	// )
 
 	if err := db.AutoMigrate(
 		&entity.User{},
