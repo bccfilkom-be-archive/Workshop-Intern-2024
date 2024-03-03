@@ -50,7 +50,7 @@ func (r *Rest) MountEndpoint() {
 	book := routerGroup.Group("/book")
 	book.POST("/", r.CreateBook)
 	book.GET("/:id", r.GetBookByID)
-	book.DELETE("/:id", r.DeleteBook)
+	book.DELETE("/:id", r.middleware.AuthenticateUser, r.middleware.OnlyAdmin, r.DeleteBook)
 	book.PATCH("/:id", r.UpdateBook)
 	book.GET("/", r.GetAllBook)
 

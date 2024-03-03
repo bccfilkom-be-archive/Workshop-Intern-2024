@@ -9,6 +9,7 @@ import (
 type Interface interface {
 	AuthenticateUser(ctx *gin.Context)
 	Timeout() gin.HandlerFunc
+	OnlyAdmin(ctx *gin.Context)
 }
 
 type middleware struct {
