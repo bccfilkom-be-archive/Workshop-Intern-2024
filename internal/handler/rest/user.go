@@ -53,3 +53,19 @@ func (r *Rest) GetUserRentBook(ctx *gin.Context) {
 
 	response.Success(ctx, http.StatusOK, "success get user rent book", user)
 }
+
+func (r *Rest) UploadPhoto(ctx *gin.Context) {
+	photo, err := ctx.FormFile("photo")
+	if err != nil {
+		response.Error(ctx, http.StatusBadRequest, "failed to bind input", err)
+		return
+	}
+
+	err = r.service.UserService.UploadPhoto(ctx, model.UserUploadPhoto{Photo: photo})
+	if err != nil {
+		response.Error(ctx, http.StatusInternalServerError, "failed to upload photo", err)
+		return
+	}
+
+	response.Success(ctx, http.StatusOK, "success upload photo", nil)
+}

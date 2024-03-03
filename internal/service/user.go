@@ -6,6 +6,7 @@ import (
 	"github.com/Ndraaa15/workshop-bcc/model"
 	"github.com/Ndraaa15/workshop-bcc/pkg/bcrypt"
 	"github.com/Ndraaa15/workshop-bcc/pkg/jwt"
+	"github.com/Ndraaa15/workshop-bcc/pkg/supabase"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -15,19 +16,22 @@ type IUserService interface {
 	GetUser(param model.UserParam) (entity.User, error)
 	Login(param model.UserLogin) (model.UserLoginResponse, error)
 	GetUserRentBook(ctx *gin.Context) (entity.User, error)
+	UploadPhoto(ctx *gin.Context, param model.UserUploadPhoto) error
 }
 
 type UserService struct {
-	ur      repository.IUserRepository
-	bcrypt  bcrypt.Interface
-	jwtAuth jwt.Interface
+	ur       repository.IUserRepository
+	bcrypt   bcrypt.Interface
+	jwtAuth  jwt.Interface
+	supabase supabase.Interface
 }
 
-func NewUserService(userRepository repository.IUserRepository, bcrypt bcrypt.Interface, jwtAuth jwt.Interface) IUserService {
+func NewUserService(userRepository repository.IUserRepository, bcrypt bcrypt.Interface, jwtAuth jwt.Interface, supabase supabase.Interface) IUserService {
 	return &UserService{
-		ur:      userRepository,
-		bcrypt:  bcrypt,
-		jwtAuth: jwtAuth,
+		ur:       userRepository,
+		bcrypt:   bcrypt,
+		jwtAuth:  jwtAuth,
+		supabase: supabase,
 	}
 }
 
@@ -99,4 +103,34 @@ func (u *UserService) GetUserRentBook(ctx *gin.Context) (entity.User, error) {
 	}
 
 	return u.ur.GetUserWithRent(param)
+}
+
+func (u *UserService) UploadPhoto(ctx *gin.Context, param model.UserUploadPhoto) error {
+	user, err := u.jwtAuth.GetLoginUser(ctx)
+	if err != nil {
+		return err
+	}
+
+	if user.PhotoLink != "" {
+		err := u.supabase.Delete(user.PhotoLink)
+		if err != nil {
+			return err
+		}
+	}
+
+	link, err := u.supabase.Upload(param.Photo)
+	if err != nil {
+		return err
+	}
+
+	err = u.ur.UpdateUser(entity.User{
+		PhotoLink: link,
+	}, model.UserParam{
+		ID: user.ID,
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

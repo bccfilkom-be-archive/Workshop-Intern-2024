@@ -10,10 +10,13 @@ require (
 )
 
 require (
+	github.com/adityarizkyramadhan/supabase-storage-uploader v1.0.0 // indirect
 	github.com/bxcodec/faker/v4 v4.0.0-beta.3 // indirect
+	github.com/fatih/color v1.15.0 // indirect
 	github.com/gin-contrib/timeout v0.0.7 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/golang-jwt/jwt/v5 v5.2.0 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
 )
 
 require (

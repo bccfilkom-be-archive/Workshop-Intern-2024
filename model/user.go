@@ -1,6 +1,10 @@
 package model
 
-import "github.com/google/uuid"
+import (
+	"mime/multipart"
+
+	"github.com/google/uuid"
+)
 
 type UserRegister struct {
 	ID       uuid.UUID `json:"-"`
@@ -25,4 +29,8 @@ type UserParam struct {
 	ID       uuid.UUID `json:"-"`
 	Email    string    `json:"-"`
 	Password string    `json:"-"`
+}
+
+type UserUploadPhoto struct {
+	Photo *multipart.FileHeader `form:"photo"`
 }

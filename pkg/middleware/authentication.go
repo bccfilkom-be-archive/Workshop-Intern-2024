@@ -15,6 +15,7 @@ func (m *middleware) AuthenticateUser(ctx *gin.Context) {
 	if bearer == "" {
 		response.Error(ctx, http.StatusUnauthorized, "empty token", errors.New(""))
 		ctx.Abort()
+		return
 	}
 
 	token := strings.Split(bearer, " ")[1]
@@ -22,14 +23,16 @@ func (m *middleware) AuthenticateUser(ctx *gin.Context) {
 	if err != nil {
 		response.Error(ctx, http.StatusUnauthorized, "failed validate token", err)
 		ctx.Abort()
+		return
 	}
-	
+
 	user, err := m.service.UserService.GetUser(model.UserParam{
 		ID: userId,
 	})
 	if err != nil {
 		response.Error(ctx, http.StatusUnauthorized, "failed get user", err)
 		ctx.Abort()
+		return
 	}
 
 	ctx.Set("user", user)

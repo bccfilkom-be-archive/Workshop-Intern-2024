@@ -45,6 +45,7 @@ func (r *Rest) MountEndpoint() {
 
 	user := routerGroup.Group("/user")
 	user.GET("/rent", r.middleware.AuthenticateUser, r.GetUserRentBook)
+	user.POST("/profile/upload", r.middleware.AuthenticateUser, r.UploadPhoto)
 
 	book := routerGroup.Group("/book")
 	book.POST("/", r.CreateBook)
